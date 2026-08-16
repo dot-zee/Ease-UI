@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/Store";
 
 /* ============================================================
    TYPES
@@ -129,9 +131,7 @@ export function Carousel({
               }`}
               onClick={() => goToSlide(index)}
               aria-label={`Go to slide ${index + 1}`}
-              aria-current={
-                currentIndex === index ? "true" : undefined
-              }
+              aria-current={currentIndex === index ? "true" : undefined}
             />
           ))}
         </div>
@@ -156,15 +156,37 @@ function CarouselDemo({
   code: string;
 }) {
   const [showCode, setShowCode] = useState(false);
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const isDark = mode === "dark";
 
   return (
-    <div className="carousel-demo">
-      <div className="carousel-demo-header">
+    <div
+      className="carousel-demo"
+      style={{
+        backgroundColor: isDark ? "#18181b" : "#e5e7eb",
+        borderColor: isDark ? "#3f3f46" : "#dfe3e8",
+      }}
+    >
+      <div
+        className="carousel-demo-header"
+        style={{
+          backgroundColor: isDark ? "#27272a" : "#f8fafc",
+          borderColor: isDark ? "#3f3f46" : "#e5e7eb",
+        }}
+      >
         <div>
-          <span className="carousel-demo-title">{title}</span>
+          <span
+            className="carousel-demo-title"
+            style={{ color: isDark ? "#e4e4e7" : "#334155" }}
+          >
+            {title}
+          </span>
 
           {description && (
-            <span className="carousel-demo-description">
+            <span
+              className="carousel-demo-description"
+              style={{ color: isDark ? "#a1a1aa" : "#64748b" }}
+            >
               {description}
             </span>
           )}
@@ -175,6 +197,10 @@ function CarouselDemo({
           className="carousel-view-code"
           onClick={() => setShowCode((value) => !value)}
           aria-expanded={showCode}
+          style={{
+            backgroundColor: isDark ? "#3f3f46" : "#f1f3f5",
+            color: isDark ? "#e4e4e7" : "#374151",
+          }}
         >
           <span className="carousel-code-icon">{"<>"}</span>
 
@@ -183,9 +209,7 @@ function CarouselDemo({
       </div>
 
       {!showCode ? (
-        <div className="carousel-demo-preview">
-          {children}
-        </div>
+        <div className="carousel-demo-preview">{children}</div>
       ) : (
         <div className="carousel-code">
           <pre>
@@ -214,9 +238,7 @@ function DemoSlide({
 }) {
   return (
     <div className={`demo-slide ${className}`}>
-      <div className="demo-slide-number">
-        {number}
-      </div>
+      <div className="demo-slide-number">{number}</div>
 
       <h3>{title}</h3>
 
@@ -272,9 +294,7 @@ function ProductCard({
 
         <p>{description}</p>
 
-        <button type="button">
-          Explore
-        </button>
+        <button type="button">Explore</button>
       </div>
     </div>
   );
@@ -309,9 +329,7 @@ function ApiRow({
         <code>{defaultValue}</code>
       </td>
 
-      <td className="api-description">
-        {description}
-      </td>
+      <td className="api-description">{description}</td>
     </tr>
   );
 }
@@ -321,6 +339,9 @@ function ApiRow({
    ============================================================ */
 
 export default function CarouselDocumentation() {
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const isDark = mode === "dark";
+
   return (
     <div className="carousel-page">
       <style>{`
@@ -338,8 +359,8 @@ export default function CarouselDocumentation() {
 
         .carousel-page {
           min-height: 100vh;
-          background: #ffffff;
-          color: #111827;
+          background: ${isDark ? "#18181b" : "#ffffff"};
+          color: ${isDark ? "#e4e4e7" : "#111827"};
           font-family:
             -apple-system,
             BlinkMacSystemFont,
@@ -358,7 +379,7 @@ export default function CarouselDocumentation() {
 
         .carousel-title {
           margin: 0;
-          color: #050505;
+          color: ${isDark ? "#fafafa" : "#050505"};
           font-size: 40px;
           line-height: 1.15;
           font-weight: 700;
@@ -367,7 +388,7 @@ export default function CarouselDocumentation() {
 
         .carousel-subtitle {
           margin: 12px 0 0;
-          color: #4b5563;
+          color: ${isDark ? "#a1a1aa" : "#4b5563"};
           font-size: 20px;
           line-height: 1.5;
         }
@@ -378,7 +399,7 @@ export default function CarouselDocumentation() {
 
         .section-title {
           margin: 0 0 18px;
-          color: #111827;
+          color: ${isDark ? "#e4e4e7" : "#111827"};
           font-size: 28px;
           line-height: 1.25;
           font-weight: 500;
@@ -390,10 +411,10 @@ export default function CarouselDocumentation() {
 
         .carousel-demo {
           margin-bottom: 20px;
-          border: 1px solid #dfe3e8;
+          border: 1px solid ${isDark ? "#3f3f46" : "#dfe3e8"};
           border-radius: 9px;
-          background: #e5e7eb;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+          background: ${isDark ? "#18181b" : "#e5e7eb"};
+          box-shadow: 0 2px 4px ${isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)"};
           overflow: hidden;
         }
 
@@ -408,20 +429,20 @@ export default function CarouselDocumentation() {
           justify-content: space-between;
           gap: 20px;
           padding: 9px 18px;
-          background: #f8fafc;
-          border-bottom: 1px solid #e5e7eb;
+          background: ${isDark ? "#27272a" : "#f8fafc"};
+          border-bottom: 1px solid ${isDark ? "#3f3f46" : "#e5e7eb"};
         }
 
         .carousel-demo-title {
           display: block;
-          color: #334155;
+          color: ${isDark ? "#e4e4e7" : "#334155"};
           font-size: 16px;
         }
 
         .carousel-demo-description {
           display: block;
           margin-top: 2px;
-          color: #64748b;
+          color: ${isDark ? "#a1a1aa" : "#64748b"};
           font-size: 12px;
         }
 
@@ -433,15 +454,15 @@ export default function CarouselDocumentation() {
           padding: 7px 12px;
           border: 0;
           border-radius: 6px;
-          background: #f1f3f5;
-          color: #374151;
+          background: ${isDark ? "#3f3f46" : "#f1f3f5"};
+          color: ${isDark ? "#e4e4e7" : "#374151"};
           font-size: 14px;
           cursor: pointer;
           transition: background 150ms ease;
         }
 
         .carousel-view-code:hover {
-          background: #e5e7eb;
+          background: ${isDark ? "#52525b" : "#e5e7eb"};
         }
 
         .carousel-code-icon {
@@ -884,13 +905,11 @@ export default function CarouselDocumentation() {
             ====================================================== */}
 
         <header>
-          <h1 className="carousel-title">
-            Carousel
-          </h1>
+          <h1 className="carousel-title">Carousel</h1>
 
           <p className="carousel-subtitle">
-            A slideshow component for cycling through
-            content, images, cards, and other elements.
+            A slideshow component for cycling through content, images, cards,
+            and other elements.
           </p>
         </header>
 
@@ -899,9 +918,7 @@ export default function CarouselDocumentation() {
             ====================================================== */}
 
         <section className="carousel-section">
-          <h2 className="section-title">
-            Usage
-          </h2>
+          <h2 className="section-title">Usage</h2>
 
           {/* ====================================================
               BASIC CAROUSEL
@@ -957,10 +974,7 @@ export default function CarouselDocumentation() {
   <div>Slide 3</div>
 </Carousel>`}
           >
-            <Carousel
-              showArrows={true}
-              showDots={false}
-            >
+            <Carousel showArrows={true} showDots={false}>
               <DemoSlide
                 number={1}
                 title="Arrow Navigation"
@@ -999,10 +1013,7 @@ export default function CarouselDocumentation() {
   <div>Slide 3</div>
 </Carousel>`}
           >
-            <Carousel
-              showArrows={false}
-              showDots={true}
-            >
+            <Carousel showArrows={false} showDots={true}>
               <DemoSlide
                 number={1}
                 title="Minimal Carousel"
@@ -1050,23 +1061,11 @@ export default function CarouselDocumentation() {
 </Carousel>`}
           >
             <Carousel>
-              <ImageSlide
-                number={1}
-                title="Mountain"
-                className="image-one"
-              />
+              <ImageSlide number={1} title="Mountain" className="image-one" />
 
-              <ImageSlide
-                number={2}
-                title="Ocean"
-                className="image-two"
-              />
+              <ImageSlide number={2} title="Ocean" className="image-two" />
 
-              <ImageSlide
-                number={3}
-                title="Forest"
-                className="image-three"
-              />
+              <ImageSlide number={3} title="Forest" className="image-three" />
             </Carousel>
           </CarouselDemo>
 
@@ -1136,10 +1135,7 @@ export default function CarouselDocumentation() {
 </Carousel>`}
           >
             <div style={{ width: "100%" }}>
-              <Carousel
-                autoPlay={true}
-                interval={2500}
-              >
+              <Carousel autoPlay={true} interval={2500}>
                 <DemoSlide
                   number={1}
                   title="Auto Play"
@@ -1210,9 +1206,7 @@ export default function CarouselDocumentation() {
             ====================================================== */}
 
         <section className="api-section">
-          <h2 className="section-title">
-            API Reference
-          </h2>
+          <h2 className="section-title">API Reference</h2>
 
           <div className="api-container">
             <table className="api-table">

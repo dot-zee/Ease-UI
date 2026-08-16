@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/Store";
 
 type TooltipSide = "top" | "right" | "bottom" | "left";
 
@@ -12,12 +14,10 @@ type TooltipProps = {
    BASIC TOOLTIP
    ========================================================= */
 
-export function Tooltip({
-  content,
-  children,
-  side = "top",
-}: TooltipProps) {
+export function Tooltip({ content, children, side = "top" }: TooltipProps) {
   const [open, setOpen] = useState(false);
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const isDark = mode === "dark";
 
   const positionStyles: Record<TooltipSide, React.CSSProperties> = {
     top: {
@@ -64,12 +64,14 @@ export function Tooltip({
             zIndex: 100,
             padding: "7px 10px",
             borderRadius: 6,
-            background: "#111827",
-            color: "#ffffff",
+            background: isDark ? "#ffffff" : "#111827",
+            color: isDark ? "#111827" : "#ffffff",
             fontSize: 13,
             lineHeight: 1.3,
             whiteSpace: "nowrap",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+            boxShadow: isDark
+              ? "0 4px 12px rgba(255, 255, 255, 0.15)"
+              : "0 4px 12px rgba(0, 0, 0, 0.15)",
             pointerEvents: "none",
           }}
         >
@@ -94,17 +96,41 @@ function TooltipDemo({
   code: string;
 }) {
   const [showCode, setShowCode] = useState(false);
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const isDark = mode === "dark";
 
   return (
-    <div className="tooltip-demo">
-      <div className="tooltip-demo-header">
-        <span className="tooltip-demo-title">{title}</span>
+    <div
+      className="tooltip-demo"
+      style={{
+        backgroundColor: isDark ? "#18181b" : "#ffffff",
+        borderColor: isDark ? "#3f3f46" : "#dfe3e8",
+        color: isDark ? "#e4e4e7" : "#111827",
+      }}
+    >
+      <div
+        className="tooltip-demo-header"
+        style={{
+          backgroundColor: isDark ? "#27272a" : "#ffffff",
+          borderColor: isDark ? "#3f3f46" : "#dfe3e8",
+        }}
+      >
+        <span
+          className="tooltip-demo-title"
+          style={{ color: isDark ? "#e4e4e7" : "#111827" }}
+        >
+          {title}
+        </span>
 
         <button
           type="button"
           className="tooltip-view-code"
           onClick={() => setShowCode((value) => !value)}
           aria-expanded={showCode}
+          style={{
+            backgroundColor: isDark ? "#3f3f46" : "#f1f3f5",
+            color: isDark ? "#e4e4e7" : "#374151",
+          }}
         >
           <span className="code-icon">{"<>"}</span>
           {showCode ? "Hide Code" : "View Code"}
@@ -150,7 +176,6 @@ function UiverseTooltip() {
               strokeLinecap="round"
             />
           </svg>
-
           Hover for Info
         </span>
       </button>
@@ -249,6 +274,9 @@ function ApiRow({
    ========================================================= */
 
 export default function TooltipDocumentation() {
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const isDark = mode === "dark";
+
   return (
     <div className="tooltip-page">
       <style>{`
@@ -262,8 +290,8 @@ export default function TooltipDocumentation() {
 
         .tooltip-page {
           min-height: 100vh;
-          background: #ffffff;
-          color: #111827;
+          background: ${isDark ? "#18181b" : "#ffffff"};
+          color: ${isDark ? "#e4e4e7" : "#111827"};
           font-family:
             -apple-system,
             BlinkMacSystemFont,
@@ -286,7 +314,7 @@ export default function TooltipDocumentation() {
 
         .tooltip-title {
           margin: 0;
-          color: #050505;
+          color: ${isDark ? "#fafafa" : "#050505"};
           font-size: 40px;
           line-height: 1.15;
           font-weight: 700;
@@ -295,7 +323,7 @@ export default function TooltipDocumentation() {
 
         .tooltip-subtitle {
           margin: 12px 0 0;
-          color: #4b5563;
+          color: ${isDark ? "#a1a1aa" : "#4b5563"};
           font-size: 20px;
           line-height: 1.5;
         }
@@ -318,10 +346,10 @@ export default function TooltipDocumentation() {
 
         .tooltip-demo {
           margin-bottom: 20px;
-          border: 1px solid #dfe3e8;
+          border: 1px solid ${isDark ? "#3f3f46" : "#dfe3e8"};
           border-radius: 9px;
-          background: #e5e7eb;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+          background: ${isDark ? "#18181b" : "#e5e7eb"};
+          box-shadow: 0 2px 4px ${isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)"};
           overflow: visible;
         }
 
@@ -335,13 +363,13 @@ export default function TooltipDocumentation() {
           align-items: center;
           justify-content: space-between;
           padding: 0 18px;
-          background: #f8fafc;
-          border-bottom: 1px solid #e5e7eb;
+          background: ${isDark ? "#27272a" : "#f8fafc"};
+          border-bottom: 1px solid ${isDark ? "#3f3f46" : "#e5e7eb"};
           border-radius: 9px 9px 0 0;
         }
 
         .tooltip-demo-title {
-          color: #334155;
+          color: ${isDark ? "#e4e4e7" : "#334155"};
           font-size: 16px;
         }
 
@@ -352,15 +380,15 @@ export default function TooltipDocumentation() {
           padding: 7px 12px;
           border: 0;
           border-radius: 6px;
-          background: #f1f3f5;
-          color: #374151;
+          background: ${isDark ? "#3f3f46" : "#f1f3f5"};
+          color: ${isDark ? "#e4e4e7" : "#374151"};
           font-size: 14px;
           cursor: pointer;
           transition: background 150ms ease;
         }
 
         .tooltip-view-code:hover {
-          background: #e5e7eb;
+          background: ${isDark ? "#52525b" : "#e5e7eb"};
         }
 
         .code-icon {
@@ -787,9 +815,7 @@ export default function TooltipDocumentation() {
 </Tooltip>`}
           >
             <Tooltip content="This is a tooltip">
-              <button className="demo-button primary-button">
-                Hover me
-              </button>
+              <button className="demo-button primary-button">Hover me</button>
             </Tooltip>
           </TooltipDemo>
 
@@ -835,9 +861,7 @@ export default function TooltipDocumentation() {
               content="Tooltips can be used on any element"
               side="bottom"
             >
-              <button className="demo-button outline-button">
-                Learn more
-              </button>
+              <button className="demo-button outline-button">Learn more</button>
             </Tooltip>
           </TooltipDemo>
 
@@ -859,9 +883,7 @@ export default function TooltipDocumentation() {
 </Tooltip>`}
           >
             <Tooltip content="Dark tooltip" side="right">
-              <button className="demo-button dark-button">
-                Help
-              </button>
+              <button className="demo-button dark-button">Help</button>
             </Tooltip>
           </TooltipDemo>
 

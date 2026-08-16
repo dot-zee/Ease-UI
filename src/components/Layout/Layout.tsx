@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/Store";
 
 /* ============================================================
    TYPES
@@ -77,15 +79,37 @@ function LayoutDemo({
   code: string;
 }) {
   const [showCode, setShowCode] = useState(false);
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const isDark = mode === "dark";
 
   return (
-    <div className="layout-demo">
-      <div className="layout-demo-header">
+    <div
+      className="layout-demo"
+      style={{
+        backgroundColor: isDark ? "#18181b" : "#e5e7eb",
+        borderColor: isDark ? "#3f3f46" : "#dfe3e8",
+      }}
+    >
+      <div
+        className="layout-demo-header"
+        style={{
+          backgroundColor: isDark ? "#27272a" : "#f8fafc",
+          borderColor: isDark ? "#3f3f46" : "#e5e7eb",
+        }}
+      >
         <div>
-          <span className="layout-demo-title">{title}</span>
+          <span
+            className="layout-demo-title"
+            style={{ color: isDark ? "#e4e4e7" : "#334155" }}
+          >
+            {title}
+          </span>
 
           {description && (
-            <span className="layout-demo-description">
+            <span
+              className="layout-demo-description"
+              style={{ color: isDark ? "#a1a1aa" : "#64748b" }}
+            >
               {description}
             </span>
           )}
@@ -96,6 +120,10 @@ function LayoutDemo({
           className="layout-view-code"
           onClick={() => setShowCode((value) => !value)}
           aria-expanded={showCode}
+          style={{
+            backgroundColor: isDark ? "#3f3f46" : "#f1f3f5",
+            color: isDark ? "#e4e4e7" : "#374151",
+          }}
         >
           <span className="layout-code-icon">{"<>"}</span>
 
@@ -104,9 +132,7 @@ function LayoutDemo({
       </div>
 
       {!showCode ? (
-        <div className="layout-demo-preview">
-          {children}
-        </div>
+        <div className="layout-demo-preview">{children}</div>
       ) : (
         <div className="layout-code">
           <pre>
@@ -129,11 +155,7 @@ function DemoBox({
   children: React.ReactNode;
   className?: string;
 }) {
-  return (
-    <div className={`demo-box ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`demo-box ${className}`}>{children}</div>;
 }
 
 /* ============================================================
@@ -175,6 +197,9 @@ function ApiRow({
    ============================================================ */
 
 export default function LayoutDocumentation() {
+  const mode = useSelector((state: RootState) => state.theme.mode);
+  const isDark = mode === "dark";
+
   return (
     <div className="layout-page">
       <style>{`
@@ -192,8 +217,8 @@ export default function LayoutDocumentation() {
 
         .layout-page {
           min-height: 100vh;
-          background: #ffffff;
-          color: #111827;
+          background: ${isDark ? "#18181b" : "#ffffff"};
+          color: ${isDark ? "#e4e4e7" : "#111827"};
           font-family:
             -apple-system,
             BlinkMacSystemFont,
@@ -212,7 +237,7 @@ export default function LayoutDocumentation() {
 
         .layout-title {
           margin: 0;
-          color: #050505;
+          color: ${isDark ? "#fafafa" : "#050505"};
           font-size: 40px;
           line-height: 1.15;
           font-weight: 700;
@@ -221,7 +246,7 @@ export default function LayoutDocumentation() {
 
         .layout-subtitle {
           margin: 12px 0 0;
-          color: #4b5563;
+          color: ${isDark ? "#a1a1aa" : "#4b5563"};
           font-size: 20px;
           line-height: 1.5;
         }
@@ -232,7 +257,7 @@ export default function LayoutDocumentation() {
 
         .section-title {
           margin: 0 0 18px;
-          color: #111827;
+          color: ${isDark ? "#e4e4e7" : "#111827"};
           font-size: 28px;
           line-height: 1.25;
           font-weight: 500;
@@ -244,10 +269,10 @@ export default function LayoutDocumentation() {
 
         .layout-demo {
           margin-bottom: 20px;
-          border: 1px solid #dfe3e8;
+          border: 1px solid ${isDark ? "#3f3f46" : "#dfe3e8"};
           border-radius: 9px;
-          background: #e5e7eb;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+          background: ${isDark ? "#18181b" : "#e5e7eb"};
+          box-shadow: 0 2px 4px ${isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)"};
           overflow: hidden;
         }
 
@@ -262,20 +287,20 @@ export default function LayoutDocumentation() {
           justify-content: space-between;
           gap: 20px;
           padding: 9px 18px;
-          background: #f8fafc;
-          border-bottom: 1px solid #e5e7eb;
+          background: ${isDark ? "#27272a" : "#f8fafc"};
+          border-bottom: 1px solid ${isDark ? "#3f3f46" : "#e5e7eb"};
         }
 
         .layout-demo-title {
           display: block;
-          color: #334155;
+          color: ${isDark ? "#e4e4e7" : "#334155"};
           font-size: 16px;
         }
 
         .layout-demo-description {
           display: block;
           margin-top: 2px;
-          color: #64748b;
+          color: ${isDark ? "#a1a1aa" : "#64748b"};
           font-size: 12px;
         }
 
@@ -287,15 +312,15 @@ export default function LayoutDocumentation() {
           padding: 7px 12px;
           border: 0;
           border-radius: 6px;
-          background: #f1f3f5;
-          color: #374151;
+          background: ${isDark ? "#3f3f46" : "#f1f3f5"};
+          color: ${isDark ? "#e4e4e7" : "#374151"};
           font-size: 14px;
           cursor: pointer;
           transition: background 150ms ease;
         }
 
         .layout-view-code:hover {
-          background: #e5e7eb;
+          background: ${isDark ? "#52525b" : "#e5e7eb"};
         }
 
         .layout-code-icon {
@@ -575,8 +600,8 @@ export default function LayoutDocumentation() {
           <h1 className="layout-title">Layout</h1>
 
           <p className="layout-subtitle">
-            A flexible layout component for arranging content with
-            consistent spacing, alignment, and responsive behavior.
+            A flexible layout component for arranging content with consistent
+            spacing, alignment, and responsive behavior.
           </p>
         </header>
 
@@ -655,9 +680,7 @@ export default function LayoutDocumentation() {
 </Layout>`}
           >
             <div className="center-example">
-              <DemoBox className="pink">
-                Centered Content
-              </DemoBox>
+              <DemoBox className="pink">Centered Content</DemoBox>
             </div>
           </LayoutDemo>
 
@@ -682,9 +705,7 @@ export default function LayoutDocumentation() {
             <div className="between-example">
               <DemoBox>Logo</DemoBox>
 
-              <DemoBox className="dark">
-                Navigation
-              </DemoBox>
+              <DemoBox className="dark">Navigation</DemoBox>
             </div>
           </LayoutDemo>
 
