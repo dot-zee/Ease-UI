@@ -1,12 +1,14 @@
 // Navbar.tsx
 import { Slot } from "@radix-ui/react-slot";
 import React, { forwardRef, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/libs/utils";
 import { entranceAnimations } from "@/libs/animations/entranceAnimation";
 import { hoverAnimations } from "@/libs/animations/hoverAnimation";
 import gsap from "gsap";
 import { Button } from "../Button";
+import type { RootState } from "@/store/Store";
 
 const navbarVariants = cva(
   `w-full flex items-center justify-between px-6 py-4 rounded-md border border-gray-200 transition-all`,
@@ -29,11 +31,12 @@ const navbarVariants = cva(
       variant: "light",
       size: "default",
     },
-  }
+  },
 );
 
 interface NavbarProps
-  extends React.HTMLAttributes<HTMLElement>,
+  extends
+    React.HTMLAttributes<HTMLElement>,
     VariantProps<typeof navbarVariants> {
   asChild?: boolean;
   animation?: keyof typeof entranceAnimations;
@@ -51,10 +54,12 @@ const Navbar = forwardRef<HTMLElement, NavbarProps>(
       hoverAnimation = "none",
       ...props
     },
-    ref
+    ref,
   ) => {
     const Comp = asChild ? Slot : "nav";
     const navbarRef = useRef<HTMLElement | null>(null);
+    const mode = useSelector((state: RootState) => state.theme.mode);
+    const resolvedVariant = variant ?? (mode === "dark" ? "dark" : "light");
 
     useEffect(() => {
       if (!navbarRef.current || animation === "none") return;
@@ -82,7 +87,10 @@ const Navbar = forwardRef<HTMLElement, NavbarProps>(
           else if (ref)
             (ref as React.MutableRefObject<HTMLElement | null>).current = node;
         }}
-        className={cn(navbarVariants({ variant, size }), className)}
+        className={cn(
+          navbarVariants({ variant: resolvedVariant, size }),
+          className,
+        )}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}
@@ -98,7 +106,7 @@ const Navbar = forwardRef<HTMLElement, NavbarProps>(
         </div>
       </Comp>
     );
-  }
+  },
 );
 
 Navbar.displayName = "Navbar";
