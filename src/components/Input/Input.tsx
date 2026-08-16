@@ -20,20 +20,17 @@ const inputVariants = cva(
         success:
           "border-green-400 focus:ring-2 focus:ring-green-400 focus:border-green-400",
       },
-      disabled: {
-        true: "bg-gray-100 text-gray-400 cursor-not-allowed opacity-80",
-      },
     },
     defaultVariants: {
       size: "md",
       tone: "default",
-      disabled: false,
     },
-  }
+  },
 );
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
     VariantProps<typeof inputVariants> {
   label?: string;
   hint?: string;
@@ -55,7 +52,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       id,
       ...props
     },
-    ref
+    ref,
   ) => {
     const inputId =
       id ||
@@ -74,7 +71,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           id={inputId}
           ref={ref}
-          className={cn(inputVariants({ size, tone, disabled }), className)}
+          className={cn(
+            inputVariants({ size, tone }),
+            disabled &&
+              "bg-gray-100 text-gray-400 cursor-not-allowed opacity-80",
+            className,
+          )}
           disabled={disabled}
           {...props}
         />
@@ -85,7 +87,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";
