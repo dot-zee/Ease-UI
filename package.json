@@ -18,11 +18,12 @@
     },
     "./style.css": "./dist/index.css"
   },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build && tsc -p tsconfig.lib.json",
-    "preview": "vite preview"
-  },
+"scripts": {
+  "dev": "vite",
+  "build": "vite build", 
+  "build:lib": "vite build --config vite.config.lib.ts && tsc -p tsconfig.lib.json",
+  "preview": "vite preview"
+},
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"

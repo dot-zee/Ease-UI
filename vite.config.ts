@@ -18,7 +18,7 @@ export default defineConfig({
     // },
     cssCodeSplit: true,
     rollupOptions: {
-      external: ["react", "react-dom"],
+      // external: ["react", "react-dom"],
       output: {
         globals: {
           react: "React",
